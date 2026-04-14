@@ -22,6 +22,17 @@
 - `recovery`
 - `self_interpretation`
 
+## セッション追跡フィールド
+
+ループ型ヒアリングにおいて、Episode がいつ・どの文脈で取れたかを追跡する。
+
+- `session_date`: いつのセッションで取れたか
+- `session_number`: 通算何回目のセッションか
+- `is_revisit`: 過去に触れたテーマの再訪か
+- `revisit_of`: どのエピソードの再訪か（再訪の場合のみ）
+
+`is_revisit: true` の Episode は、前回との突合による Inference 生成の材料になる。
+
 ## アプリケーションによって追加される項目の例
 
 - `execution_pattern`

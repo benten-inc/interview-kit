@@ -24,6 +24,8 @@
 - `episode_count`: 何個くらいの場面に基づくか
 - `exception_cases`: 普段の印象と違った場面
 - `bias_risk`: 関係性や感情による歪みリスク
+- `triggering_question`: 状態マップのどの問いに対応してこのヒアリングが走ったか
+- `state_map_field`: 状態マップのどの領域に効くか
 
 ## 同僚ヒアリングで特に持ちたいもの
 
@@ -41,6 +43,13 @@
 - 他者ヒアリングを `Inference` に吸収せず残す
 - `Person_Pattern` とのズレを比較する
 - `Gap_Analysis` を作る材料にする
+- 状態マップの `best_source: other` な問いに答える
+
+## いつ取るか
+
+`Observer_Perspective` は独立したフェーズで取るものではない。
+状態マップが「この問いは他者に聞いた方が効く」と判断した時に、対象者を特定して取りに行く。
+詳細は `hearing-design.md` の「他者セッションの設計」を参照。
 
 ## どう作るか
 
