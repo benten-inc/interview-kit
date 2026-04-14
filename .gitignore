@@ -1,0 +1,3 @@
+data/raw/*.md
+data/structured/*.md
+data/output/*.md
