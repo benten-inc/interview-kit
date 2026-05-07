@@ -31,10 +31,10 @@ fields:
     session_count: 2
     open_questions:
       - question: "仕事以外で防衛が出る場面を取れていない"
-        best_source: self
+        next: self
         priority: high
       - question: "本人の沈黙が周囲にどう伝わっているか"
-        best_source: other
+        next: other
         target_relation: "部下"
         priority: medium
 
@@ -46,7 +46,7 @@ fields:
     session_count: 0
     open_questions:
       - question: "まだ触れていない"
-        best_source: self
+        next: self
         priority: medium
 ```
 
@@ -64,15 +64,15 @@ fields:
 |--------|------|
 | surface | 平時の自己申告のみ。場面ベースの具体が出ていない |
 | middle | 具体的な場面が出ている。ただし平時のみ、または単一文脈 |
-| deep | 有事・複数文脈・身体感覚・矛盾を含むエピソードが出ている |
+| deep | 有事・複数文脈・矛盾を含むエピソードが出ている |
 
 #### verbalization_quality の扱い
 
 | レベル | 意味 | 次のアクション |
 |--------|------|--------------|
-| high | きれいにまとまっている | 別角度から再確認が必要。場面ベースで具体に降ろす。身体感覚を聞く |
+| high | きれいにまとまっている | 別角度から再確認が必要。場面ベースで具体に降ろす |
 | medium | 部分的に言語化できている | 言語化できていない部分を場面で埋める |
-| low | 言いよどんでいる、修正が多い | 急かさない。言い直しの方向を記録する。行動や身体感覚に近い可能性 |
+| low | 言いよどんでいる、修正が多い | 急かさない。言い直しの方向を記録する。具体的な行動場面に近い可能性 |
 
 **verbalization_quality: high は confidence を下げる方向に働く。**
 うまく言えてしまっている領域こそ、もう一回別角度から触る。
@@ -110,13 +110,13 @@ unresolved_contradictions:
     related_fields: ["drives", "value_tradeoff"]
     related_claims: ["人を大事にしている"]
     priority: high
-    best_source: self
+    next: self
     suggested_approach: "例外質問で浮かせる"
 
   - description: "Session 1 では有事に冷静と語ったが、Session 3 の具体場面では感情的に反応していた"
     related_fields: ["pressure_response", "emotional_reactivity"]
     priority: medium
-    best_source: other
+    next: other
     target_relation: "共同創業者"
     suggested_approach: "他者から有事の本人の様子を聞く"
 ```
@@ -158,20 +158,22 @@ sessions:
     duration_minutes: 45
     episodes_collected: 3
     key_themes: ["guardrails の深掘り", "前回の drives の再訪"]
-    notes: "前回から考えたこと: drives に関して自分でも気づいていなかった点を語った"
+    notes: "drives に関して自分でも気づいていなかった点を語った"
 ```
 
-## 収束条件
+## 外部化レビューのトリガー
 
-以下をすべて満たした場合、フィードバックに移行できる。
+以下をすべて満たした時、next action として `review` が選ばれる。
 
 ```yaml
-convergence:
-  pattern_confidence: false   # Person_Pattern の主要領域が confidence: high
-  divergence_validated: false  # Self_Narrative_Divergence が少なくとも1つ validated
-  no_high_priority_questions: true  # open_questions に priority: high がない
-  trust_high: false            # trust_level: high
+review_trigger:
+  pattern_confidence: false       # Person_Pattern の主要領域が confidence: high
+  divergence_validated: false     # Cognitive_Divergence が少なくとも1つ validated
+  trust_high: false                # trust_level: high
+  new_validated_since_last_review: false  # 前回レビューから新しい validated 構造が追加された（初回はスキップ）
 ```
+
+これは「収束」ではない。成果物を返した後もループは続く。
 
 ## diminishing returns の検出
 
@@ -180,14 +182,14 @@ diminishing_returns:
   - field: "guardrails"
     touch_count: 4            # 3回以上触って上がらない
     current_confidence: medium
-    attempted_approaches: ["場面ベース", "身体感覚"]
-    next_suggestion: "best_source を other に切り替え"
+    attempted_approaches: ["場面ベース", "別文脈"]
+    next_suggestion: "next を other に切り替え"
     status: stalled           # progressing / stalled / parked
 ```
 
 ## 状態マップの更新タイミング
 
-すべてのセッション後に更新する。更新手順は `hearing-design.md` のセッション後分析を参照。
+すべてのセッション後に更新する。更新手順は `.claude/skills/interviewer/SKILL.md §8 セッション後分析` を参照。
 
 ## 一言でいうと
 
